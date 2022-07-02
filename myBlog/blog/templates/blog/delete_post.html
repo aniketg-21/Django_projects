@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% block title %} My Blog {% endblock %}
+{% block body %}
+  <div class="container mt-4">
+    {% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+    <span class="display-6"><b>Post –> </b>{{ post.title }}</span>
+    <form method="post"> {% csrf_token %}
+      <p class="fs-5 ps-4 mt-2">Are you sure you wanna delete this? It'll be deleted permanently.</p>
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-danger p-2 text-center" role="alert">
+      <h2>You are not logged in!!</h2>
+      <a href="{% url 'login' %}">Login to delete post.</a>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}

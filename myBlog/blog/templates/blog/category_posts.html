@@ -1,0 +1,41 @@
+{% extends 'blog/base.html' %}
+{% block title %} My Blog {% endblock %}
+{% block body %}
+  <div class="container mt-4">
+    <div class="alert alert-primary p-2 text-center" role="alert">
+      <h2>{{ cat }}</h2>
+    </div>
+    {% if cat_posts|length == 0 %}
+    <div class="alert alert-danger p-2 text-center" role="alert">
+      <h2>No Articles Posted Yet!!!</h2>
+      <a href="{% url 'AddPost' %}">Click here to add+</a>
+    </div>
+    {% endif %}
+    <div class="row mb-2 mt-4">
+      {% for post in cat_posts %}
+      <div class="col-md-6">
+        <div class="row border rounded mb-4 shadow g-0">
+          <div class="col p-4">
+            <div class="mb-2 d-flex flex-row justify-content-between">
+              <a href="{% url 'CategoryPosts' post.category|slugify %}" class="text-success fw-bold text-decoration-none">{{post.category}}</a>
+              {% if user.is_authenticated and user.id == post.author.id %}
+              <span><a href="{% url 'UpdatePost' post.pk %}" class="btn btn-primary btn-sm p-0 ps-2 pe-2 text-decoration-none">Edit</a> <a href="{% url 'DeletePost' post.pk %}" class="btn btn-primary btn-sm p-0 ps-2 pe-2 text-decoration-none">Delete</a></span>
+              {% endif %}
+            </div>
+            <h4>{{post.title|slice:"0:50"}}</h4>
+            <span class="text-muted">{{post.pub_date}} <i>| {{post.author.first_name}} {{post.author.last_name}}</i></span>
+            <p class="mb-auto">{{ post.summary|slice:"0:100"}}...</p>
+            <a href="{% url 'ArticleDetail' post.pk %}">Continue reading</a>
+          </div>
+          <div class="col-auto">
+            <img src="" alt="">
+          </div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:2 %}
+      </div><div class="row mb-2">
+    {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+{% endblock %}

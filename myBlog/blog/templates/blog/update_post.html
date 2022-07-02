@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+{% block title %} My Blog {% endblock %}
+{% block body %}
+  <div class="container mt-4">
+    {% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+    <h1>Update Post</h1>
+    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Update</button>
+    </form>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-danger p-2 text-center" role="alert">
+      <h2>You are not logged in!!</h2>
+      <a href="{% url 'login' %}">Login to update post.</a>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}

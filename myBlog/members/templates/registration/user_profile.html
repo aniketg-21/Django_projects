@@ -1,0 +1,62 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+{% block body %}
+  {% if user.is_authenticated %}
+  <div class="container mt-4">
+    <div class="row g-0">
+      <div class="col-auto px-4 mx-auto">
+        <img {% if user_profile.profile_pic %}src="/media/{{user_profile.profile_pic}}"{% else %}src="{% static 'blog/images/default_img.png' %}"{% endif %} class="rounded-circle" width="200" height="200">
+      </div>
+      <div class="col m-4 my-2">
+        <h3 class="text-primary">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h3>
+        <h5><b>Username:</b> {{ user_profile.user.username }}</h5>
+        <h5><b>Email:</b> {{ user_profile.user.email }}</h5>
+        <ul class="list-unstyled m-0">
+          {% if user_profile.website_url %}
+          <li><a href="{{user_profile.website_url}}" target="_blank" class="lead text-decoration-none"> Website </a></li> {% endif %} {% if user_profile.facebook_url %}
+          <li><a href="{{user_profile.facebook_url}}" target="_blank" class="lead text-decoration-none"> Facebook </a></li> {% endif %} {% if user_profile.instagram_url %}
+          <li><a href="{{user_profile.instagram_url}}" target="_blank" class="lead text-decoration-none"> Instagram </a></li> {% endif %} {% if user_profile.twitter_url %}
+          <li><a href="{{user_profile.twitter_url}}" target="_blank" class="lead text-decoration-none"> Twitter </a></li> {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="col mt-lg-2">
+      <p class="fs-5"><b>Bio: </b>{{ user_profile.bio }}</p>
+      <div class="alert alert-primary p-2 text-center" role="alert">
+        <h2>My Posts</h2>
+      </div>
+      <div class="row mb-2 mt-4">
+        {% for post in user_posts %}
+        <div class="col-md-6">
+          <div class="row border rounded mb-4 shadow g-0">
+            <div class="col-auto d-none d-lg-block">
+              <img {% if post.thumbnail %}src="/media/{{post.thumbnail}}"{% else %}src="https://source.unsplash.com/random/400x400/?{{post.category.lower}}"{% endif %} width="180" height="240" class="bd-placeholder-img">
+            </div>
+            <div class="col p-4">
+              <div class="mb-2 d-flex flex-row justify-content-between">
+                <a href="{% url 'CategoryPosts' post.category|slugify %}" class="text-success fw-bold text-decoration-none">{{post.category}}</a>
+                {% if user.is_authenticated and user.id == post.author.id %}
+                <span><a href="{% url 'UpdatePost' post.pk %}" class="btn btn-primary btn-sm p-0 ps-2 pe-2 text-decoration-none">Edit</a> <a href="{% url 'DeletePost' post.pk %}" class="btn btn-primary btn-sm p-0 ps-2 pe-2 text-decoration-none">Delete</a></span>
+                {% endif %}
+              </div>
+              <h4>{{post.title|slice:"0:25"}}{% if post.title|length >= 25 %}...{% endif %}</h4>
+              <span class="text-muted">{{post.pub_date}} <i>| {{post.author.first_name}} {{post.author.last_name}}</i></span>
+              <p class="mb-auto">{{ post.summary }}</p>
+              <a href="{% url 'ArticleDetail' post.pk %}">Continue reading</a>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:2 %}
+        </div><div class="row mb-2">
+      {% endif %}
+      {% endfor %}
+      </div>
+
+    </div>
+  </div>
+  {% else %}
+  You are not logged in.
+  {% endif %}
+{% endblock %}

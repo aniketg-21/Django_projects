@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% block title %} Edit Settings {% endblock %}
+{% block body %}
+  {% if user.is_authenticated %}
+  <div class="container mt-4">
+    <h1>Edit Settings</h1>
+    <form method="post"> {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
+  {% else %}
+  You are not logged in.
+  {% endif %}
+{% endblock %}

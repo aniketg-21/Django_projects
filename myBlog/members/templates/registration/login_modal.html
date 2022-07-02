@@ -1,0 +1,27 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-light">
+        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="text-center" action="{% url 'Login' %}" method="post"> {% csrf_token %}
+          <div class="row mb-2">
+            <label for="id_username" class="col-2 col-form-label">Username:</label>
+            <div class="col-10">
+              <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="50" required id="id_username">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="id_password" class="col-2 col-form-label">Password:</label>
+            <div class="col-10">
+              <input type="password" class="form-control" name="password" autocomplete="current-password" required id="id_password">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success col-lg-4">login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
